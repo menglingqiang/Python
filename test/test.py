@@ -19,7 +19,8 @@ def parse(html,ulist):
             tds = tr('td')
             ulist.append([tds[0].string])
 def main():
-    url = 'http://music.163.com/playlist?id=86379700'
+    id = input("请输入您想要获取的云音乐列表 id:\n")
+    url = 'http://music.163.com/playlist?id='+id
     html = downloadHtml(url)
     soup = BeautifulSoup(html,'html.parser')
     summary_node = soup.find('textarea') #得到所有歌曲的json串
