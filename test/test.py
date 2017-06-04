@@ -1,8 +1,13 @@
 # coding=UTF-8
-import requests
+import codecs
 import json
+
 from  bs4 import BeautifulSoup
 import bs4
+from pip._vendor.appdirs import unicode
+import requests
+
+
 def downloadHtml(url):
     try:
         kv = {'user-agent':'Mozilla/5.0'}
@@ -19,8 +24,11 @@ def parse(html,ulist):
             tds = tr('td')
             ulist.append([tds[0].string])
 def main():
-    id = input("请输入您想要获取的云音乐列表 id:\n")
-    url = 'http://music.163.com/playlist?id='+id
+    #id = input("请输入您想要获取的云音乐列表 id:\n")
+    tplt = "\t{:80}\t{:80}\t{:80}"
+    print(tplt.format("歌曲", "歌手", "专辑"))
+    id=""
+    url = 'http://music.163.com/playlist?id=86379700'+id
     html = downloadHtml(url)
     soup = BeautifulSoup(html,'html.parser')
     summary_node = soup.find('textarea') #得到所有歌曲的json串
@@ -28,20 +36,26 @@ def main():
     data = json.loads(musicJson)
     count = len(data)
     for i in range(count):
-        print(data[i]['name'])
+        print(tplt.format(data[i]['name'],data[i]['artists'][0]['name'],data[i]['album']['name']))
     #data = json.loads(html)
     #print(data)
-    #file_object = open('test.txt','rb')
-    #try:
-    #     all_the_text = file_object.read( ).decode('utf-8')
-    #     print(all_the_text)
+    #file_object = open('test.txt','wb')
+    with open('test.txt', 'w',encoding="utf-8") as f:
+        f.write(tplt.format("歌曲", "歌手", "专辑")+'\n')
+        for i in range(count):
+        #    str = unicode(tplt.format(data[i]['name'],data[i]['artists'][0]['name'],data[i]['album']['name']),"utf-8")
+            f.write(tplt.format(data[i]['name'],data[i]['artists'][0]['name'],data[i]['album']['name'])+'\n')
+        f.close( )
+    #    all_the_text = file_object.read( ).decode('utf-8')
+    #    print(all_the_text)
     #finally:
     #     file_object.close( )
     #with open('test.txt', 'rb') as f:
     #    data = json.load(f)
 main()    
     
-    
+#+"歌手:"
+#       +data[i]['artists']['name']+"专辑:"+data[i]['album']['name']   
     
     
     
